@@ -158,11 +158,27 @@ def send_static(path):
     return send_from_directory('build', path)
 
 
+#Task 2
+@app.route('/api/gene/<id>')
+
+def gene_id(id):
+
+    query = request.args.get('q', '')
+    category = request.args.get('category', '')
+
+    if query == '':
+        return jsonify({
+        "result": None
+        })
+    return jsonify({'results': build_es_search_body_request(query, category, id)})
+
+
 # render user interfaces in client JS
 @app.route('/')
 @app.route('/about')
 @app.route('/help')
 @app.route('/search')
+@app.route('/gene')
 def react_render():
     return render_template('index.jinja2')
 

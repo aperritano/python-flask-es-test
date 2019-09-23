@@ -308,3 +308,15 @@ def graph_visualization(formatted_search_results):
         "nodes": [nodes[k] for k in nodes],
         "edges": edges
     }
+
+# def get_gene_data(searchquery, geneID):
+#     if searchquery == '' and geneID == '':
+#         searchquery["query"] = {
+#             "function_score": {
+#                 "query": searchquery,
+#                 "random_score": {"seed": 12345}
+#             }
+#         }
+#     else:
+#         searchquery["query"] = searchquery
+#     return jsonify({'response': 200,  result: searchquery[] })

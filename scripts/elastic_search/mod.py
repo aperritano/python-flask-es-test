@@ -4,6 +4,7 @@ import requests
 import os
 import re
 from elasticsearch import Elasticsearch
+import pandas as pd
 
 
 class MOD():
@@ -289,3 +290,37 @@ class MOD():
         self.index_genes_into_es()
         self.index_go_into_es()
         self.index_diseases_into_es()
+
+
+    def parse_genome_data(file1, file2, file3):
+        '''
+           Description: Function to parse given files using Pandas
+           Parameters: filenames
+        '''
+        gene_id = ""
+        gene_href = 'http://flybase.org/reports/' + gene_id + ".html"
+        flygene_Columns = ['id', 'name', 'species', 'gene_type', 'description', 'gene_chromosomes', 'gene_chromosomes_starts','gene_chromosomes_ends', 'gene_chromosomes_strand', 'gene_synonyms']
+
+        flygene_data = pd.read_csv(file1, sep='\t', headers=None)
+
+        flygene_dataframe = pd.DataFrame(flyGOgene_data['Drosophila melanogaster'], columns= flygene_Columns)
+        flygene_dataframe.fillna(method='ffill')
+
+        get_gene_id = 'FBgn0000001' ## hard coding this due to lack of time, this can be retrieved from the above dataframe using the gene name.
+
+        flyGOGene_columns = ['name', 'aliases', 'id', 'list of genes']
+        flyGOgene_data = pd.read_csv(file2, sep='\t', headers=None)
+        flyGOgene_dataframe = pd.DataFrame(flyGOgene_data['FBgn0000001'], columns= flygene_Columns)
+        flyGOgene_dataframe.fillna(method='ffill')
+
+        flyDiseaseGene_columns = ['Disease Symbol', 'Disease Name', 'Disease Synonym', 'OMIM ID', 'Description', 'Associated Genes']
+        flyDiseaseGene_data = pd.read_csv(file2, sep='\t', headers=None)
+        flyDiseaseGene_dataframe = pd.DataFrame(flyGOgene_data['FBgn0000001'], columns= flygene_Columns)
+        flyDiseaseGene_dataframe.fillna(method='ffill')
+
+        # combining dataframes side-by-side
+        bulk_gene_data = pd.concat([flygene_dataframe, flyGOgene_dataframe, flyDiseaseGene_dataframe], axis=1)
+
+        #Few additional dataclean up steps still needs to be performed, like delete duplicates, check data types and correct them if not used properly, trim spaces in the data
+
+        index_into_es(bulk_gene_data)

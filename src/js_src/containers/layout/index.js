@@ -30,8 +30,10 @@ class Layout extends Component {
             <div className={SMALL_COL_CLASS}>
               <div className={style.nav}>
                 <Link className={`nav-link ${style.navLink}`} to='/'><i className='fa fa-home' /> Home</Link>
+                <Link className={`nav-link ${style.navLink}`} to='/gene'><i className='fa fa-question-circle' /> Gene Page</Link>
                 <Link className={`nav-link ${style.navLink}`} to='/about'><i className='fa fa-info-circle' /> About</Link>
                 <Link className={`nav-link ${style.navLink}`} to='/help'><i className='fa fa-question-circle' /> Help</Link>
+
               </div>
             </div>
             <div className={LARGE_COL_CLASS}>
