@@ -16,6 +16,7 @@ class FlyBase(MOD):
         return panther_id.split("=")[1]
 
     def load_genes(self):
+        genes = MOD.genes
 
         go_data_csv_filename = "./data/FlyGene.tsv"
 
@@ -33,9 +34,7 @@ class FlyBase(MOD):
                 if row[5]:
                     chromosomes = [row[5]]
 
-                #for i in xrange(10):
-                #    next(row, None)
-                gene = {
+                genes[row[0]] = {
                     "id": row[0],
                     "name": row[1],
                     "gene_symbol": row[1],
